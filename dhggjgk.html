@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Enhanced Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .calculator {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 280px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .array-calc {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 280px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    input,
+    select,
+    button,
+    textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .clear-btn {
+      background: #dc3545;
+      margin-top: 5px;
+    }
+
+    .clear-btn:hover {
+      background: #c82333;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #28a745;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 4px;
+      min-height: 20px;
+    }
+
+    .history {
+      margin-top: 15px;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+      background: #f8f9fa;
+    }
+
+    .history-item {
+      padding: 5px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history h4 {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      color: #666;
+    }
+
+    textarea {
+      resize: vertical;
+      font-family: monospace;
+    }
+
+    h3 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <!-- Basic Calculator -->
+    <div class="calculator">
+      <h3>Calculator</h3>
+
+      <input type="number" id="num1" placeholder="First number">
+      <input type="number" id="num2" placeholder="Second number">
+
+      <select id="operator">
+        <option value="+">Add (+)</option>
+        <option value="-">Subtract (-)</option>
+        <option value="*">Multiply (×)</option>
+        <option value="/">Divide (÷)</option>
+        <option value="**">Power (^)</option>
+        <option value="%">Modulo (%)</option>
+      </select>
+
+      <button onclick="calculate()">Calculate</button>
+
+      <div class="result" id="result"></div>
+
+      <div class="history" id="history">
+        <h4>Calculation History</h4>
+        <div id="historyList">No history yet</div>
+      </div>
+
+      <button class="clear-btn" onclick="clearHistory()">Clear History</button>
+    </div>
+
+    <!-- Array Calculator -->
+    <div class="array-calc">
+      <h3>Array Calculator</h3>
+
+      <label>Enter numbers (comma-separated):</label>
+      <textarea id="arrayInput" rows="3" placeholder="e.g., 1, 2, 3, 4, 5"></textarea>
+
+      <select id="arrayOperation">
+        <option value="sum">Sum</option>
+        <option value="average">Average</option>
+        <option value="min">Minimum</option>
+        <option value="max">Maximum</option>
+        <option value="product">Product</option>
+        <option value="count">Count</option>
+      </select>
+
+      <button onclick="calculateArray()">Calculate</button>
+
+      <div class="result" id="arrayResult"></div>
+
+      <div class="history" id="arrayHistory">
+        <h4>Array History</h4>
+        <div id="arrayHistoryList">No history yet</div>
+      </div>
+
+      <button class="clear-btn" onclick="clearArrayHistory()">Clear History</button>
+    </div>
+  </div>
+
+  <script>
+    // Calculation history array
+    let calculationHistory = [];
+    let arrayHistory = [];
+
+    // Operations object using function mapping
+    const operations = {
+      '+': (a, b) => a + b,
+      '-': (a, b) => a - b,
+      '*': (a, b) => a * b,
+      '/': (a, b) => a / b,
+      '**': (a, b) => a ** b,
+      '%': (a, b) => a % b
+    };
+
+    // Array operations object
+    const arrayOperations = {
+      sum: (arr) => arr.reduce((acc, val) => acc + val, 0),
+      average: (arr) => arr.reduce((acc, val) => acc + val, 0) / arr.length,
+      min: (arr) => Math.min(...arr),
+      max: (arr) => Math.max(...arr),
+      product: (arr) => arr.reduce((acc, val) => acc * val, 1),
+      count: (arr) => arr.length
+    };
+
+    function calculate() {
+      const num1 = Number(document.getElementById("num1").value);
+      const num2 = Number(document.getElementById("num2").value);
+      const operator = document.getElementById("operator").value;
+
+      // Validate inputs
+      if (isNaN(num1) || isNaN(num2)) {
+        document.getElementById("result").textContent = "Please enter valid numbers";
+        return;
+      }
+
+      // Check for division by zero
+      if (operator === '/' && num2 === 0) {
+        document.getElementById("result").textContent = "Cannot divide by zero";
+        return;
+      }
+
+      // Calculate using the operations object
+      const answer = operations[operator](num1, num2);
+
+      // Display result
+      document.getElementById("result").textContent = "Result: " + answer;
+
+      // Add to history array
+      const historyEntry = {
+        num1: num1,
+        num2: num2,
+        operator: operator,
+        result: answer,
+        timestamp: new Date().toLocaleTimeString()
+      };
+
+      calculationHistory.push(historyEntry);
+
+      // Update history display
+      updateHistoryDisplay();
+    }
+
+    function updateHistoryDisplay() {
+      const historyList = document.getElementById("historyList");
+
+      if (calculationHistory.length === 0) {
+        historyList.innerHTML = "No history yet";
+        return;
+      }
+
+      // Display last 10 calculations (most recent first)
+      const recentHistory = calculationHistory.slice(-10).reverse();
+
+      historyList.innerHTML = recentHistory.map(entry => 
+        `<div class="history-item">${entry.num1} ${entry.operator} ${entry.num2} = ${entry.result} <small>(${entry.timestamp})</small></div>`
+      ).join('');
+    }
+
+    function clearHistory() {
+      calculationHistory = [];
+      document.getElementById("result").textContent = "";
+      updateHistoryDisplay();
+    }
+
+    function calculateArray() {
+      const input = document.getElementById("arrayInput").value;
+      const operation = document.getElementById("arrayOperation").value;
+
+      // Parse the input string into an array of numbers
+      const numbers = input.split(',').map(str => Number(str.trim())).filter(num => !isNaN(num));
+
+      if (numbers.length === 0) {
+        document.getElementById("arrayResult").textContent = "Please enter valid numbers";
+        return;
+      }
+
+      // Calculate using the arrayOperations object
+      const result = arrayOperations[operation](numbers);
+
+      // Display result
+      document.getElementById("arrayResult").textContent = 
+        `Result: ${result}${operation === 'average' ? ` (${numbers.length} numbers)` : ''}`;
+
+      // Add to array history
+      const historyEntry = {
+        numbers: numbers,
+        operation: operation,
+        result: result,
+        timestamp: new Date().toLocaleTimeString()
+      };
+
+      arrayHistory.push(historyEntry);
+
+      // Update history display
+      updateArrayHistoryDisplay();
+    }
+
+    function updateArrayHistoryDisplay() {
+      const historyList = document.getElementById("arrayHistoryList");
+
+      if (arrayHistory.length === 0) {
+        historyList.innerHTML = "No history yet";
+        return;
+      }
+
+      // Display last 10 calculations (most recent first)
+      const recentHistory = arrayHistory.slice(-10).reverse();
+
+      historyList.innerHTML = recentHistory.map(entry => {
+        const numsDisplay = entry.numbers.length > 5 
+          ? `[${entry.numbers.slice(0, 5).join(', ')}...]` 
+          : `[${entry.numbers.join(', ')}]`;
+        return `<div class="history-item">${entry.operation}(${numsDisplay}) = ${entry.result} <small>(${entry.timestamp})</small></div>`;
+      }).join('');
+    }
+
+    function clearArrayHistory() {
+      arrayHistory = [];
+      document.getElementById("arrayResult").textContent = "";
+      updateArrayHistoryDisplay();
+    }
+  </script>
+
+</body>
+
+</html>

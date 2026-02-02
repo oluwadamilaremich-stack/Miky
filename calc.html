@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    .calculator {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 280px;
+    }
+
+    input,
+    select,
+    button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      box-sizing: border-box;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #28a745;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 4px;
+      min-height: 20px;
+    }
+
+    .history{
+      margin-top: 15px;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+      background: #f8f9fa;
+    }
+
+    .history h3{
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="calculator">
+    <h3>Simple Calculator</h3>
+
+    <input type="number" id="num1" placeholder="First number">
+    <input type="number" id="num2" placeholder="Second number">
+
+    <select id="operator">
+      <option value="+">Add (+)</option>
+      <option value="-">Subtract (-)</option>
+      <option value="*">Multiply (×)</option>
+      <option value="/">Divide (÷)</option>
+    </select>
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div class="result" id="result"></div>
+
+    <div class="history" id="history">
+      <h3>Calculation History</h3>
+      <div id="historyList">No history yet</div>
+    </div>
+
+    <button class="clear-btn" onclick="clearHistory()">Clear History</button>
+  </div>
+
+  <script>
+
+    function calculate() {
+      const num1 = Number(document.getElementById("num1").value);
+      const num2 = Number(document.getElementById("num2").value);
+      const operator = document.getElementById("operator").value;
+
+      let answer;
+
+      if (operator === "+") {
+        answer = num1 + num2;
+
+      } else if (operator === "-") {
+        answer = num1 - num2;
+      } else if (operator === "*") {
+        answer = num1 * num2;
+      } else if (operator === "/") {
+        answer = num1 / num2;
+      }
+
+      document.getElementById("result").textContent = "Result: " + answer;
+    }
+  </script>
+
+</body>
+
+</html>
+
+
+<!--While a single = is for assigning values and == (double equals)
+ is for "loose" comparison, === (triple equals) 
+is the gold standard for checking if two things are truly identical.-->

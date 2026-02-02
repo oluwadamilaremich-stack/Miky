@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Enhanced JS Calculator</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e0e0e0; display: flex; justify-content: center; padding-top: 50px; }
+    .container { background: white; padding: 25px; border-radius: 12px; width: 350px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    input, select, button { width: 100%; padding: 10px; margin-top: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+    button { background-color: #007bff; color: white; border: none; cursor: pointer; font-weight: bold; }
+    button:hover { background-color: #0056b3; }
+    .history-section { margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px; font-size: 0.9em; max-height: 150px; overflow-y: auto; }
+    .result { margin-top: 15px; font-weight: bold; color: #333; font-size: 1.2em; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h3>Smart Calculator</h3>
+  <input type="number" id="num1" placeholder="First number">
+  <input type="number" id="num2" placeholder="Second number">
+
+  <select id="operator">
+    <option value="add">Add (+)</option>
+    <option value="subtract">Subtract (-)</option>
+    <option value="multiply">Multiply (×)</option>
+    <option value="divide">Divide (÷)</option>
+    <option value="power">Power (^)</option>
+  </select>
+
+  <button onclick="calculate()">Calculate</button>
+
+  <div class="result" id="result">Result: --</div>
+
+  <div class="history-section">
+    <strong>History:</strong>
+    <ul id="historyList"></ul>
+  </div>
+</div>
+
+<script>
+  // 1. History Array
+  const history = [];
+
+  // 2. Operations Object Map
+  const operations = {
+    add: (a, b) => a + b,
+    subtract: (a, b) => a - b,
+    multiply: (a, b) => a * b,
+    divide: (a, b) => b !== 0 ? a / b : "Error (Div by 0)",
+    power: (a, b) => Math.pow(a, b)
+  };
+
+  function calculate() {
+    const n1 = Number(document.getElementById("num1").value);
+    const n2 = Number(document.getElementById("num2").value);
+    const opKey = document.getElementById("operator").value;
+
+    // Execute operation using the object map
+    const answer = operations[opKey](n1, n2);
+
+    // Update UI
+    document.getElementById("result").textContent = `Result: ${answer}`;
+
+    // 3. Store in History Array
+    const timestamp = new Date().toLocaleTimeString();
+    const entry = `${n1} ${opKey} ${n2} = ${answer} (${timestamp})`;
+    history.push(entry);
+
+    updateHistoryUI();
+  }
+
+  function updateHistoryUI() {
+    const list = document.getElementById("historyList");
+    list.innerHTML = ""; // Clear current list
+    
+    // Using array method .forEach to build the list
+    history.slice().reverse().forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      list.appendChild(li);
+    });
+  }
+</script>
+
+</body>
+</html>
