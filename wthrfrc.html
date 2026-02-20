@@ -126,7 +126,7 @@ function updateUI(data) {
   document.getElementById("location").innerText =
     `${data.name}, ${data.sys.country}`;
   document.getElementById("time").innerText = 
-    new Date().toLocaleTineString([], { hour: '2-digit', minute: '2-digit' });
+    new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   document.getElementById("temp").innerText =
     Math.round(data.main.temp) + "°C";
