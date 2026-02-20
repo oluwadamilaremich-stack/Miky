@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>JS Functions with classList</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 40px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .product {
+            width: 320px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        /* HOVER COLOR CLASS */
+        .highlight {
+            background-color: lightblue;
+        }
+
+        .product img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        /* TOGGLE BUTTON COLOR CLASS */
+        .green-btn {
+            background: green;
+        }
+
+        .cart {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>🛒 Mini Shop — Functions + classList</h2>
+
+    <!-- PRODUCT CARD -->
+    <div class="product" onmouseenter="addHighlight()" onmouseleave="removeHighlight()">
+        <img src="https://via.placeholder.com/300" alt="Product">
+
+        <h3>Cool Sneakers</h3>
+        <p>₦25,000</p>
+
+        <!-- ADD TO CART -->
+        <button onclick="addToCart()">Add to Cart</button>
+
+        <!-- COLOR TOGGLE -->
+        <button id="colorBtn" onclick="toggleButton()">
+            Turn Green
+        </button>
+    </div>
+
+    <!-- CART DISPLAY -->
+    <div class="cart">
+        Cart Items: <span id="cartCount">0</span>
+    </div>
+
+    <script>
+        /*
+          ============================
+          STATE
+          ============================
+        */
+
+        let cartItems = 0;
+
+
+        /*
+          ============================
+          FUNCTION 1: addHighlight
+          ============================
+          Adds a CSS class to change UI
+        */
+        function addHighlight() {
+            document.querySelector(".product").classList.add("highlight");
+        }
+
+        /*
+          ============================
+          FUNCTION 2: removeHighlight
+          ============================
+          Removes the CSS class
+        */
+        function removeHighlight() {
+            document.querySelector(".product").classList.remove("highlight");
+        }
+
+        /*
+          ============================
+          FUNCTION 3: addToCart
+          ============================
+          Updates the cart count on the page
+        */
+        function addToCart() {
+            cartItems++;
+            document.getElementById("cartCount").textContent = cartItems;
+        }
+
+        /*
+          ============================
+          FUNCTION 4: toggleButton
+          ============================
+          Uses classList.toggle + IF logic
+        */
+        function toggleButton() {
+            const button = document.getElementById("colorBtn");
+
+            button.classList.toggle("green-btn");
+
+            if (button.classList.contains("green-btn")) {
+                button.innerHTML = "Turn Black";
+            } else {
+                button.innerHTML = "Turn Green";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

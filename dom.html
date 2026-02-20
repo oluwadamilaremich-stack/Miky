@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The DOM Lab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-900 text-white min-h-screen flex flex-col items-center p-10">
+
+  <h1 class="text-4xl font-bold text-cyan-400 mb-2">The DOM Lab</h1>
+  <p class="text-slate-400 mb-10">Open your console (F12) to see the magic happen.</p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
+
+    <!-- 1. Selection & Text -->
+    <div class="border border-cyan-400 rounded-xl p-6">
+      <h2 class="text-xl font-semibold mb-4">1. Selection & Text</h2>
+      <p id="text" class="italic text-orange-400 mb-4">
+        I'm a streamer, please help me!!!!
+      </p>
+      <button id="textBtn"
+        class="bg-cyan-400 text-black px-4 py-2 rounded-lg hover:bg-cyan-300 transition">
+        Modify InnerText
+      </button>
+    </div>
+
+    <!-- 2. Styles & Classes -->
+    <div class="border border-emerald-400 rounded-xl p-6">
+      <h2 class="text-xl font-semibold mb-4">2. Styles & Classes</h2>
+
+      <div id="shape"
+        class="w-24 h-24 rounded-full bg-purple-500 mb-4 transition-all duration-300">
+      </div>
+
+      <button id="toggleBtn"
+        class="bg-emerald-400 text-black px-4 py-2 rounded-lg hover:bg-emerald-300 transition">
+        Toggle Shape & Color
+      </button>
+    </div>
+
+    <!-- 3. Creating Nodes -->
+    <div class="border border-yellow-400 rounded-xl p-6">
+      <h2 class="text-xl font-semibold mb-4">3. Creating Nodes</h2>
+
+      <ul id="list" class="list-disc list-inside mb-4 text-slate-300">
+        <li>Original Item #1</li>
+      </ul>
+
+      <button id="addItem"
+        class="bg-yellow-400 text-black px-4 py-2 rounded-lg hover:bg-yellow-300 transition">
+        Add New List Item
+      </button>
+    </div>
+
+    <!-- 4. Event Object -->
+    <div class="border border-pink-400 rounded-xl p-6">
+      <h2 class="text-xl font-semibold mb-4">4. The Event Object</h2>
+
+      <div id="box" class="bg-slate-800 rounded-lg h-40 flex items-center justify-center cursor-crosshair select-none relative">
+        <div class="text-sm font-mono text-center">
+            <p>X: <span id="x">0</span></p>
+            <p>Y: <span id="y">0</span></p>
+        </div> 
+      </div>
+    </div>
+
+  </div>
+
+  <script src="dom.js"></script>
+</body>
+</html>

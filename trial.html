@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 40px;
+            justify-items: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .product{
+            width: 320px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .color{
+            background-color: aquamarine;
+        }
+
+        .product img{
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        button{
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .green-btn{
+            background: green;
+        }
+
+        .cart{
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>🛒 My Mini Shop</h2>
+
+    <div class="product" onmouseenter="addColor()" onmouseleave="removeColor()">
+        <img src="" alt="My Product">
+
+        <h3>Cool Sneakers</h3>
+        <p>₦25,000</p>
+
+        <button onclick="addItems()">Add to Cart</button>
+
+        <button id="colorBtn" onclick="switchColor()">Turn Green</button>
+    </div>
+
+    <div class="cart">
+        Cart Items: <span id="cartCount">0</span>
+    </div>
+
+    <script>
+        let cartItems = 0;
+
+        function addColor(){
+            document.querySelector(".product").classList.add("color");
+        }
+
+        function removeColor(){
+            document.querySelector(".product").classList.remove("color")
+        }
+
+        function addItems(){
+            cartItems++;
+            document.getElementById("cartCount").textContent = cartItems;
+        }
+
+        function switchColor(){
+            const button = document.getElementById("colorBtn");
+
+            const isGreen = button.classList.toggle("green-btn");
+
+            button.innerHTML = isGreen ? "Turn Black" : "Turn Green";
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

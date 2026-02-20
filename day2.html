@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Callback Assignment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-900 text-white flex items-center justify-center h-screen">
+
+    <div class="bg-slate-800 p-8 rounded-xl w-96 text-center space-y-6 shadow-lg">
+        <h1 class="text-2xl font-bold">File Manager</h1>
+        <p id="display" class="text-gray-300">Ready to begin...</p>
+
+        <div class="flex justify-between">
+            <button id="uploadBtn" class="bg-green-600 px-4 py-2 rounded hover:bg-green-700 transition">
+                Upload File
+            </button>
+            
+            <button id="cancelBtn" class="bg-red-600 px-4 py-2 rounded hover:bg-red-700 transition">
+                Cancel Upload
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        const statusText = document.getElementById("display");
+
+        function uploadComplete() {
+            statusText.textContent = "Your file has been stored successfully.";
+            statusText.className = "text-green-400";
+        }
+
+        function uploadCancelled() {
+            statusText.textContent = "The upload process was stopped.";
+            statusText.className = "text-red-400";
+        }
+
+        function runUpload(action) {
+            statusText.textContent = "Uploading data to server...";
+            statusText.className = "text-amber-400";
+            setTimeout(() => {
+                action();
+            }, 2000);
+        }
+
+        document.getElementById("uploadBtn").addEventListener("click", () => {
+            runUpload(uploadComplete);
+        });
+
+        document.getElementById("cancelBtn").addEventListener("click", () => {
+            runUpload(uploadCancelled);
+        });
+    </script>
+
+
+
+</body>
+</html>
