@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Weather App</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+body {
+  background: radial-gradient(circle at center, #1f2a48 0%, #0f172a 70%);
+}
+.glow-card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+</style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center text-white px-4">
+
+<div class="w-full max-w-md text-center space-y-8">
+
+  <!-- SEARCH -->
+  <div class="flex items-center gap-2">
+    <input id="cityInput" type="text"
+      placeholder="Search city..."
+      class="flex-1 bg-white/5 border border-white/10 px-4 py-2 rounded-xl outline-none focus:ring-2 focus:ring-cyan-500 text-sm" />
+    <button onclick="searchCity()"
+      class="bg-white/10 p-3 rounded-xl hover:bg-white/20 transition">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+  </div>
+
+  <!-- LOCATION -->
+  <div>
+    <h2 id="location" class="text-lg font-semibold">Loading...</h2>
+    <p id="date" class="text-sm opacity-70"></p>
+  </div>
+
+  <!-- ICON -->
+  <div class="text-7xl text-yellow-400">
+    <i id="weatherIcon" class="fa-solid fa-sun"></i>
+  </div>
+
+  <!-- TEMP -->
+  <div>
+    <h1 id="temp" class="text-6xl font-bold">--°C</h1>
+    <p id="description" class="text-lg capitalize opacity-80"></p>
+    <p id="feelsLike" class="text-sm opacity-60"></p>
+  </div>
+
+  <!-- STATS -->
+  <div class="grid grid-cols-3 gap-4">
+
+    <div class="glow-card rounded-2xl p-4 text-center">
+      <i class="fa-solid fa-wind text-purple-400 text-xl"></i>
+      <p id="wind" class="font-semibold mt-2">-- km/h</p>
+      <span class="text-xs opacity-60">Wind</span>
+    </div>
+
+    <div class="glow-card rounded-2xl p-4 text-center">
+      <i class="fa-solid fa-droplet text-blue-400 text-xl"></i>
+      <p id="humidity" class="font-semibold mt-2">-- %</p>
+      <span class="text-xs opacity-60">Humidity</span>
+    </div>
+
+    <div class="glow-card rounded-2xl p-4 text-center">
+      <i class="fa-solid fa-sun text-orange-400 text-xl"></i>
+      <p id="uv" class="font-semibold mt-2">--</p>
+      <span class="text-xs opacity-60">UV Index</span>
+    </div>
+
+  </div>
+
+  <!-- SUNRISE / SUNSET -->
+  <div class="grid grid-cols-2 gap-4">
+
+    <div class="glow-card rounded-2xl p-4">
+      <i class="fa-solid fa-sun text-yellow-400"></i>
+      <p id="sunrise" class="font-semibold mt-2">--</p>
+      <span class="text-xs opacity-60">Sunrise</span>
+    </div>
+
+    <div class="glow-card rounded-2xl p-4">
+      <i class="fa-solid fa-moon text-orange-300"></i>
+      <p id="sunset" class="font-semibold mt-2">--</p>
+      <span class="text-xs opacity-60">Sunset</span>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+const API_KEY = "ee81d3520ae6199e41fa61a897b7cd3b";
+let currentCity = "Dhaka";
+
+async function fetchWeather(city = currentCity) {
+  try {
+    currentCity = city;
+
+    const res = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
+    );
+    const data = await res.json();
+
+    if (data.cod !== 200) {
+      alert("City not found!");
+      return;
+    }
+
+    updateUI(data);
+
+  } catch (err) {
+    alert("Error fetching data");
+  }
+}
+
+function updateUI(data) {
+
+  document.getElementById("location").innerText =
+    `${data.name}, ${data.sys.country}`;
+
+  document.getElementById("temp").innerText =
+    Math.round(data.main.temp) + "°C";
+
+  document.getElementById("description").innerText =
+    data.weather[0].description;
+
+  document.getElementById("feelsLike").innerText =
+    "Feels like " + Math.round(data.main.feels_like) + "°C";
+
+  document.getElementById("humidity").innerText =
+    data.main.humidity + "%";
+
+  document.getElementById("wind").innerText =
+    Math.round(data.wind.speed * 3.6) + " km/h";
+
+  document.getElementById("uv").innerText = "5"; // Static (OpenWeather free plan doesn’t provide UV here)
+
+  const sunrise = new Date(data.sys.sunrise * 1000);
+  const sunset = new Date(data.sys.sunset * 1000);
+
+  document.getElementById("sunrise").innerText =
+    sunrise.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  document.getElementById("sunset").innerText =
+    sunset.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  const now = new Date();
+  document.getElementById("date").innerText =
+    now.toLocaleDateString("en-US", { weekday: "long", day: "numeric", month: "short", year: "numeric" });
+
+  updateIcon(data.weather[0].main);
+}
+
+function updateIcon(condition) {
+  const icon = document.getElementById("weatherIcon");
+
+  if (condition.includes("Cloud")) {
+    icon.className = "fa-solid fa-cloud";
+  } else if (condition.includes("Rain")) {
+    icon.className = "fa-solid fa-cloud-rain";
+  } else if (condition.includes("Clear")) {
+    icon.className = "fa-solid fa-sun";
+  } else {
+    icon.className = "fa-solid fa-smog";
+  }
+}
+
+function searchCity() {
+  const city = document.getElementById("cityInput").value;
+  if (city) fetchWeather(city);
+}
+
+fetchWeather();
+</script>
+
+</body>
+</html>
