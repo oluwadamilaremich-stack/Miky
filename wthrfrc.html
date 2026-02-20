@@ -125,8 +125,11 @@ function updateUI(data) {
 
   document.getElementById("location").innerText =
     `${data.name}, ${data.sys.country}`;
-  document.getElementById("time").innerText = 
-    new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const cityTime = new Date(
+    (Date.now() + (data.timezone * 1000))
+  );
+  document.getElementById("time").innerText =
+  cityTime.toUTCString().slice(17, 22);
 
   document.getElementById("temp").innerText =
     Math.round(data.main.temp) + "°C";
