@@ -39,6 +39,7 @@ body {
   <div>
     <h2 id="location" class="text-lg font-semibold">Loading...</h2>
     <p id="date" class="text-sm opacity-70"></p>
+    <p id="time" class="text-sm opacity-70"></p>
   </div>
 
   <!-- ICON -->
@@ -97,7 +98,7 @@ body {
 
 <script>
 const API_KEY = "ee81d3520ae6199e41fa61a897b7cd3b";
-let currentCity = "Dhaka";
+let currentCity = "Lagos";
 
 async function fetchWeather(city = currentCity) {
   try {
@@ -124,6 +125,11 @@ function updateUI(data) {
 
   document.getElementById("location").innerText =
     `${data.name}, ${data.sys.country}`;
+  const cityTime = new Date(
+    (Date.now() + (data.timezone * 1000))
+  );
+  document.getElementById("time").innerText =
+  cityTime.toUTCString().slice(17, 22);
 
   document.getElementById("temp").innerText =
     Math.round(data.main.temp) + "°C";
