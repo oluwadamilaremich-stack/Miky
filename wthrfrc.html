@@ -39,6 +39,7 @@ body {
   <div>
     <h2 id="location" class="text-lg font-semibold">Loading...</h2>
     <p id="date" class="text-sm opacity-70"></p>
+    <p id="time" class="text-sm opacity-70"></p>
   </div>
 
   <!-- ICON -->
@@ -124,6 +125,8 @@ function updateUI(data) {
 
   document.getElementById("location").innerText =
     `${data.name}, ${data.sys.country}`;
+  document.getElementById("time").innerText = 
+    new Date().toLocaleTineString([], { hour: '2-digit', minute: '2-digit' });
 
   document.getElementById("temp").innerText =
     Math.round(data.main.temp) + "°C";
